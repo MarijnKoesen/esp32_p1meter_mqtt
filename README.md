@@ -2,8 +2,6 @@
 
 Software for the ESP2866 that sends P1 smart meter data to an MQTT broker (with OTA firmware updates)
 
-This project is a simplified version of [Flip Hess' project](https://github.com/fliphess/esp8266_p1meter)
-
 
 ## Connection of the P1 meter to the ESP8266
 
@@ -99,4 +97,21 @@ Following is an example definition of the sensors on your config.yaml
   name: P1 Short Power Peaks
   state_topic: "sensors/power/p1meter/short_power_peaks"
 ```
+
+
+
+## Thanks to
+
+This sketch is mostly copied and pasted from several other projects.
+Standing on the heads of giants, big thanks and great respect to the writers and/or creators of:
+
+- https://github.com/WhoSayIn/esp8266_dsmr2mqtt
+- https://github.com/fliphess/esp8266_p1meter
+- https://github.com/jantenhove/P1-Meter-ESP8266
+- https://github.com/neographikal/P1-Meter-ESP8266-MQTT
+- http://gejanssen.com/howto/Slimme-meter-uitlezen/
+- https://github.com/rroethof/p1reader/
+- http://romix.macuser.nl/software.html
+- http://blog.regout.info/category/slimmeter/
+- http://domoticx.com/p1-poort-slimme-meter-hardware/
 
