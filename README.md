@@ -1,4 +1,6 @@
-# esp8266 DSMR2MQTT
+# ESP8266 P1 Meter to MQTT
+
+[![Build Status](https://travis-ci.org/MarijnKoesen/esp8266_p1meter_mqtt.svg?branch=master)](https://travis-ci.org/MarijnKoesen/esp8266_p1meter_mqtt)
 
 Software for the ESP2866 that sends P1 smart meter data to an MQTT broker (with OTA firmware updates)
 
