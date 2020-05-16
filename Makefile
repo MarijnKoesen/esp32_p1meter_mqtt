@@ -15,4 +15,4 @@ clean:
 	PATH=${PATH} platformio run --target clean
 
 upload:
-	PATH=${PATH} platformio run --target program --environment esp8266
+	PATH=${PATH} platformio run --target upload --environment esp8266
