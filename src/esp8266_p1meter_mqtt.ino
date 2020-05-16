@@ -307,6 +307,12 @@ void read_p1_serial()
 
       telegram[len] = '\n';
       telegram[len + 1] = 0;
+
+      String topic = String(MQTT_ROOT_TOPIC) + "/raw_log";
+      String msg = String(telegram);
+      msg.trim();
+      send_mqtt_message(topic.c_str(), (char*)(msg.c_str()));
+
       yield();
 
       bool result = decode_telegram(len + 1);
