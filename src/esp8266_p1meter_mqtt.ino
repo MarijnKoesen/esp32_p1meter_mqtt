@@ -123,6 +123,7 @@ void send_data_to_broker()
   send_metric("consumption_low_tarif", CONSUMPTION_LOW_TARIF);
   send_metric("consumption_high_tarif", CONSUMPTION_HIGH_TARIF);
   send_metric("actual_consumption", ACTUAL_CONSUMPTION);
+  send_metric("actual_returned", ACTUAL_RETURNED);
   send_metric("instant_power_usage", INSTANT_POWER_USAGE);
   send_metric("instant_power_current", INSTANT_POWER_CURRENT);
   send_metric("gas_meter_m3", GAS_METER_M3);
@@ -248,6 +249,10 @@ bool decode_telegram(int len)
   if (strncmp(telegram, "1-0:1.7.0", strlen("1-0:1.7.0")) == 0)
   {
     ACTUAL_CONSUMPTION = getValue(telegram, len, '(', '*');
+  }
+  if (strncmp(telegram, "1-0:2.7.0", strlen("1-0:2.7.0")) == 0)
+  {
+    ACTUAL_RETURNED = getValue(telegram, len, '(', '*');
   }
 
   if (strncmp(telegram, "1-0:21.7.0", strlen("1-0:21.7.0")) == 0)
