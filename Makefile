@@ -16,3 +16,6 @@ clean:
 
 upload:
 	PATH=${PATH} platformio run --target upload --environment esp8266
+
+serial-monitor:
+	PATH=${PATH} platformio device monitor

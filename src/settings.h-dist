@@ -1,43 +1,94 @@
-#define BAUD_RATE 115200
+#ifndef SETTINGS_H
+#define SETTINGS_H
 
+#include <dsmr.h>
+
+#define BAUD_RATE 115200
 #define P1_SERIAL_RX D5
 
-#define P1_MAXLINELENGTH 1024
-
 #define HOSTNAME "p1meter"
-
 #define OTA_PASSWORD "admin"
 
-#define WIFI_TIMEOUT 30000
+#define MQTT_AUTODISCOVERY_TOPIC "homeassistant/sensor/p1meter"
+#define MQTT_DEVICE_ID "p1meter"
+#define MQTT_ROOT_TOPIC "sensors/p1"
 
-#define MQTT_MAX_RECONNECT_TRIES 100
+#define WIFI_SSID "CHANGE_WITH_YOUR_WIFI_SSID"
+#define WIFI_PASS "CHANGE_WITH_YOUR_WIFI_PASSWORD"
 
-#define MQTT_ROOT_TOPIC "sensors/power/p1meter"
+#define MQTT_HOST "CHANGE_WITH_YOUR_MQTT_BROKER_HOST"
+#define MQTT_PORT "CHANGE_WITH_YOUR_MQTT_PORT_(THE_DEFAULT_IS_1883)"
+#define MQTT_USER "CHANGE_WITH_YOUR_MQTT_USER"
+#define MQTT_PASS "CHANGE_WITH_YOUR_MQTT_PASSWORD"
 
-long LAST_RECONNECT_ATTEMPT = 0;
+/**
+ * Define the data we're interested in, as well as the datastructure to
+ * hold the parsed data. This list shows all supported fields, remove
+ * any fields you are not using from the below list to make the parsing
+ * faster, and the data in mqtt smaller. 
+ * Each template argument below results in a field of the same name.
+ */
+using MyData = ParsedData<
+    /* String */ identification,
+    /* String */ p1_version,
+    /* String */ timestamp,
+    /* String */ equipment_id,
+    /* FixedValue */ energy_delivered_tariff1,
+    /* FixedValue */ energy_delivered_tariff2,
+    /* FixedValue */ energy_returned_tariff1,
+    /* FixedValue */ energy_returned_tariff2,
+    /* String */ electricity_tariff,
+    /* FixedValue */ power_delivered,
+    /* FixedValue */ power_returned,
+    /* FixedValue */ electricity_threshold,
+    /* uint8_t */ electricity_switch_position,
+    /* uint32_t */ electricity_failures,
+    /* uint32_t */ electricity_long_failures,
+    /* String */ electricity_failure_log,
 
-char WIFI_SSID[32] = "CHANGE_WITH_YOUR_WIFI_SSID";
-char WIFI_PASS[32] = "CHANGE_WITH_YOUR_WIFI_PASSWORD";
+    /* uint32_t */ electricity_sags_l1,
+    /* uint32_t */ electricity_sags_l2,
+    /* uint32_t */ electricity_sags_l3,
+    /* uint32_t */ electricity_swells_l1,
+    /* uint32_t */ electricity_swells_l2,
+    /* uint32_t */ electricity_swells_l3,
+    /* String */ message_short,
+    /* String */ message_long,
 
-char MQTT_HOST[64] = "CHANGE_WITH_YOUR_MQTT_BROKER_HOST";
-char MQTT_PORT[6]  = "CHANGE_WITH_YOUR_MQTT_BROKER_PORT(USUALLY_1883)";
-char MQTT_USER[32] = "CHANGE_WITH_YOUR_MQTT_USER";
-char MQTT_PASS[32] = "CHANGE_WITH_YOUR_MQTT_PASSWORD";
+    /* FixedValue */ voltage_l1,
+    /* FixedValue */ voltage_l2,
+    /* FixedValue */ voltage_l3,
 
-char telegram[P1_MAXLINELENGTH];
+    /* FixedValue */ current_l1,
+    /* FixedValue */ current_l2,
+    /* FixedValue */ current_l3,
 
-long CONSUMPTION_LOW_TARIF;
-long CONSUMPTION_HIGH_TARIF;
-long ACTUAL_CONSUMPTION;
-long ACTUAL_RETURNED;
-long INSTANT_POWER_CURRENT;
-long INSTANT_POWER_USAGE;
-long GAS_METER_M3;
+    /* FixedValue */ power_delivered_l1,
+    /* FixedValue */ power_delivered_l2,
+    /* FixedValue */ power_delivered_l3,
+    /* FixedValue */ power_returned_l1,
+    /* FixedValue */ power_returned_l2,
+    /* FixedValue */ power_returned_l3,
 
-long ACTUAL_TARIF;
-long SHORT_POWER_OUTAGES;
-long LONG_POWER_OUTAGES;
-long SHORT_POWER_DROPS;
-long SHORT_POWER_PEAKS;
+    /* uint16_t */ gas_device_type,
+    /* String */ gas_equipment_id,
+    /* uint8_t */ gas_valve_position,
+    /* TimestampedFixedValue */ gas_delivered,
 
-unsigned int currentCRC = 0;
+    /* uint16_t */ thermal_device_type,
+    /* String */ thermal_equipment_id,
+    /* uint8_t */ thermal_valve_position,
+    /* TimestampedFixedValue */ thermal_delivered,
+
+    /* uint16_t */ water_device_type,
+    /* String */ water_equipment_id,
+    /* uint8_t */ water_valve_position,
+    /* TimestampedFixedValue */ water_delivered,
+
+    /* uint16_t */ slave_device_type,
+    /* String */ slave_equipment_id,
+    /* uint8_t */ slave_valve_position,
+    /* TimestampedFixedValue */ slave_delivered
+>;
+
+#endif
