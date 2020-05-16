@@ -104,7 +104,7 @@ bool mqtt_reconnect()
 
 void send_metric(String name, long metric)
 {
-  if (metric > 0) {
+  // if (metric > 0) {
 //    Serial.print(F("Sending metric to broker: "));
 //    Serial.print(name);
 //    Serial.print(F("="));
@@ -115,7 +115,7 @@ void send_metric(String name, long metric)
 
     String topic = String(MQTT_ROOT_TOPIC) + "/" + name;
     send_mqtt_message(topic.c_str(), output);
-  }
+  // }
 }
 
 void send_data_to_broker()
