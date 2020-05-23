@@ -9,6 +9,7 @@
 WiFiClient espClient;
 MqttClient mqttClient(espClient);
 P1Reader reader(&Serial, 2);
+unsigned long lastKeepAlive;
 
 struct MqttPublisher {
   template <typename Item> void apply(Item &i) {
@@ -59,9 +60,16 @@ void setup() {
 }
 
 void loop() {
-  wifiKeepAlive();
-  mqttClient.keepAlive();
   ArduinoOTA.handle();
+
+  // No need to keep alive every loop, that's much too often and will result in some P1 messages
+  // being lost, so just be chill and do it every 5 seconds
+  long now = millis();
+  if (now - lastKeepAlive > 5000) {
+    wifiKeepAlive();
+    mqttClient.keepAlive();
+    lastKeepAlive = now;
+  }
 
   if (reader.loop()) {
     MyData data;
