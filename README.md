@@ -1,55 +1,51 @@
-# ESP8266 P1 Meter to MQTT
+# ESP32 P1 Meter to MQTT
 
-[![Build Status](https://travis-ci.com/MarijnKoesen/esp8266_p1meter_mqtt.svg?branch=master)](https://travis-ci.org/MarijnKoesen/esp8266_p1meter_mqtt)
-
-Software for the ESP2866 that sends P1 smart meter data to an MQTT broker using Auto Discovery (with OTA firmware updates)
+Software for the ESP32 that sends P1 smart meter data to an MQTT broker using Auto Discovery (with OTA firmware updates)
 
 
-## Connection of the P1 meter to the ESP8266
+## Connection of the P1 meter to the ESP32
 
-As the Serial data is inverted you can't simply hook up the P1 meter to your ESP8266.
+As the Serial data is inverted you can't simply hook up the P1 meter to your ESP32.
 
 I know there is the SoftwareSerial library that can actually do the inversion with code, but in my experience it's unstable and it didn't
 give me a stable enough result that was useable for me.
 
-So I use a small hardware invertor so I can hookup the P1 meter directly to the hardware serial connection of the ESP8266, this has the downside that you can't debug using `Serial.print` anymore, but the benefit is that it's very stable. When it's stable you don't need to debug. See below for development instructions.
+So I use a small hardware invertor so I can hookup the P1 meter directly to the hardware serial connection of the ESP32, this has the downside that you can't debug using `Serial.print` anymore, but the benefit is that it's very stable. When it's stable you don't need to debug. See below for development instructions.
 
 
 ### Hook up the P1 meter 
 
 As there is not a good RJ11 jack in Fritzing it's a bit hard to see the exact pinout in the breadboard schematic below, so this shows the correct pins for the RJ11 plug used below.
 
-| ESP8266 Pin | P1 Pin |
-| ----        | ----   |
-| GND         | GND    |
-| 5V          | RTS    |
-| DATA (RXD)  | D5     |
+| ESP32 Pin    | P1 Pin |
+| ------------ | ------ |
+| GND          | GND    |
+| 3.3V         | RTS    |
+| Pin 16 (RXD) | D5     |
 
 Use a 10K resistor in between between DATA (RXD) and RTS.
 
 ![RJ11 P1 connetor](http://gejanssen.com/howto/Slimme-meter-uitlezen/RJ11-pinout.png)
 
-### Connecting the ESP8266
+### Connecting the ESP32
+
+**Note this diagram shows the use of a BS170, but I don't use that anymore. I only have the 10k resistor now.**
 
 ![Connection diagram](https://github.com/MarijnKoesen/esp8266_p1meter_mqtt/raw/master/doc/P1_Meter_Schematic.png)
-
-
-Note to developers: if you want to do debugging, you can hook up any board with multiple Serial ports, like an ESP32 or an Arduino Mega, and use that to debug. I just happened
-to only have some ESP8266 laying around, so that's what I used for this project.
-
 
 
 ## Installation
 
 1. Install platform.io
-2. Run `make upload`
+2. Run `make build`
+3. Run `make upload`
 
 
 ## Data Sent
 
 All metrics are send to their own MQTT topic.
 
-By default the ESP8266 sends out all data received by the P1 meter, but this is modifieable in the settings.hpp.
+By default the ESP32 sends out all data received by the P1 meter, but this is modifieable in the settings.hpp.
 
 ```cpp
 /**
@@ -116,10 +112,10 @@ using MyData = ParsedData<
     /* uint8_t */ water_valve_position,
     /* TimestampedFixedValue */ water_delivered,
 
-    /* uint16_t */ slave_device_type,
-    /* String */ slave_equipment_id,
-    /* uint8_t */ slave_valve_position,
-    /* TimestampedFixedValue */ slave_delivered
+    /* uint16_t */ sub_device_type,
+    /* String */ sub_equipment_id,
+    /* uint8_t */ sub_valve_position,
+    /* TimestampedFixedValue */ sub_delivered
 >;
 ```
 

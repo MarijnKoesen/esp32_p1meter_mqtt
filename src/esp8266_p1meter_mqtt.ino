@@ -1,14 +1,13 @@
 #include "settings.hpp"
-#include <ESP8266WiFi.h>
-#include <SoftwareSerial.h>
-#include <WiFiClient.h>
+#include <WiFi.h>
 #include <dsmr.h>
 #include "MqttClient.h"
 #include "arduino_ota.h"
 
 WiFiClient espClient;
-MqttClient mqttClient(espClient);
-P1Reader reader(&Serial, 2);
+PubSubClient pubSubClient(espClient);
+MqttClient mqttClient(&pubSubClient);
+P1Reader reader(&Serial2, 2);
 unsigned long lastKeepAlive;
 
 struct MqttPublisher {
@@ -17,6 +16,7 @@ struct MqttPublisher {
       String topic = String(MQTT_ROOT_TOPIC) + "/" + String(Item::name);
       // String value = String(i.val()) + String(Item::unit());
       String value = String(i.val());
+      DEBUG(String("Sending " + topic + " = " + value));
 
       mqttClient.sendMessage(topic, value);
     }
@@ -49,13 +49,24 @@ struct AutoDiscoveryPublisher {
 
 void setup() {
   Serial.begin(BAUD_RATE);
-  wifiKeepAlive();
-  mqttClient.keepAlive();
+  Serial2.begin(BAUD_RATE, SERIAL_8N1, RXD2, TXD2, true);
 
+  DEBUG("Starting Wifi");
+  wifiKeepAlive();
+
+  DEBUG("Setup OTA");
   setupOTA();
+
+  DEBUG("Connecting to MQTT");
+  mqttClient.keepAlive();
+  mqttClient.sendMessage(String(MQTT_ROOT_TOPIC) + String("/healthcheck"), "connected");
+
+  DEBUG("Setup reader");
   reader.enable(false);
 
   MyData data;
+
+  DEBUG("Autodiscovery");
   data.applyEach(AutoDiscoveryPublisher());
 }
 
@@ -69,6 +80,9 @@ void loop() {
     wifiKeepAlive();
     mqttClient.keepAlive();
     lastKeepAlive = now;
+
+    DEBUG("Healthcheck");
+    mqttClient.sendMessage(String(MQTT_ROOT_TOPIC) + String("/healthcheck"), "alive");
   }
 
   if (reader.loop()) {
@@ -79,7 +93,7 @@ void loop() {
       data.applyEach(MqttPublisher());
     } else {
       // Parser error, print error
-      // Serial.println(err);
+      DEBUG(err);
     }
   }
 }
@@ -88,8 +102,9 @@ void wifiKeepAlive() {
   if (WiFi.status() != WL_CONNECTED) {
     WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-    while (WiFi.status() != WL_CONNECTED) {
-      delay(500);
+    while (WiFi.waitForConnectResult() != WL_CONNECTED) { 
+      delay(5000);
+      ESP.restart();
     }
   }
 }

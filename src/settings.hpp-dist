@@ -3,8 +3,13 @@
 
 #include <dsmr.h>
 
+// #define DEBUG(msg) Serial.println(msg)
+#define DEBUG(msg)
+
 #define BAUD_RATE 115200
-#define P1_SERIAL_RX D5
+
+#define RXD2 16 // Pin to connect to P1
+#define TXD2 17 // Not connected
 
 #define HOSTNAME "p1meter"
 #define OTA_PASSWORD "admin"
