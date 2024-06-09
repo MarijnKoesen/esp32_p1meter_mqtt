@@ -85,10 +85,9 @@ using MyData = ParsedData<
     /* uint8_t */ water_valve_position,
     /* TimestampedFixedValue */ water_delivered,
 
-    /* uint16_t */ slave_device_type,
-    /* String */ slave_equipment_id,
-    /* uint8_t */ slave_valve_position,
-    /* TimestampedFixedValue */ slave_delivered
->;
+    /* uint16_t */ sub_device_type,
+    /* String */ sub_equipment_id,
+    /* uint8_t */ sub_valve_position,
+    /* TimestampedFixedValue */ sub_delivered>;
 
 #endif
