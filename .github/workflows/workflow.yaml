@@ -1,0 +1,28 @@
+name: Build
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.platformio/.cache
+          key: ${{ runner.os }}-pio
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install PlatformIO Core
+        run: pip install --upgrade platformio
+
+      - name: Create config
+        run: |
+          cp src/settings.hpp-dist src/settings.hpp
+          sed -i 's/CHANGE_WITH_YOUR_MQTT_BROKER_PORT(USUALLY_1883)/1883/' src/settings.hpp
+
+      - name: Build PlatformIO Project
+        run: pio run
