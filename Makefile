@@ -15,7 +15,7 @@ clean:
 	PATH=${PIO_PATH} platformio run --target clean
 
 upload:
-	PATH=${PIO_PATH} platformio run --target upload --environment esp8266
+	PATH=${PIO_PATH} platformio run --target upload --environment esp32
 
 serial-monitor:
 	PATH=${PIO_PATH} platformio device monitor
