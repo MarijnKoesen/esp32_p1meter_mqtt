@@ -1,7 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include "MqttClient.h"
-#include "settings.h"
+#include "settings.hpp"
 
 long LAST_RECONNECT_ATTEMPT = 0;
 

@@ -1,4 +1,4 @@
 .DS_Store
 .pio
-settings.h
+settings.hpp
 .vscode

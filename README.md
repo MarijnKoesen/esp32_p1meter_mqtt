@@ -49,7 +49,7 @@ to only have some ESP8266 laying around, so that's what I used for this project.
 
 All metrics are send to their own MQTT topic.
 
-By default the ESP8266 sends out all data received by the P1 meter, but this is modifieable in the settings.h.
+By default the ESP8266 sends out all data received by the P1 meter, but this is modifieable in the settings.hpp.
 
 ```cpp
 /**
@@ -126,7 +126,7 @@ using MyData = ParsedData<
 
 ## Home Assistant Configuration
 
-Just enable MQTT AutoDiscovery and set the correct topic in the settings.h and all sensors will be automatically added.
+Just enable MQTT AutoDiscovery and set the correct topic in the settings.hpp and all sensors will be automatically added.
 
 
 ## Thanks to

@@ -1,5 +1,5 @@
 #include "arduino_ota.h"
-#include "settings.h"
+#include "settings.hpp"
 
 void setupOTA() {
   ArduinoOTA.setPort(8266);
